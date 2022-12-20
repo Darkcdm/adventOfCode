@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/darks/Desktop/GitHub Repos/adventOfCode/3nd Day",
-      "program": "c:/Users/darks/Desktop/GitHub Repos/adventOfCode/3nd Day/build/Debug/outDebug",
+      "cwd": "c:/Users/Dark/Desktop/Programing GitHub Repos/adventOfCode/3rd Day",
+      "program": "c:/Users/Dark/Desktop/Programing GitHub Repos/adventOfCode/3rd Day/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

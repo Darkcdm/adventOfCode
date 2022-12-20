@@ -83,6 +83,8 @@ char findDuplicates(struct Backpack backpack){
     return 0;
 }
 
+char findTriplicate(struct Backpack backpack1,struct Backpack backpack2, struct Backpack backpack3)
+
 unsigned long long getScore(char duplicate){
     unsigned long long value;
     value = 10;
@@ -96,24 +98,49 @@ unsigned long long getScore(char duplicate){
     return 0;
 }
 
+void initBackpack(struct Backpack * backpack){
+    backpack->content = calloc(8, sizeof(char));
+    backpack->leftPart = NULL;
+    backpack->rightPart = NULL;
+    backpack->length = 0;
+    backpack->size = 8;
+}
+
+void initDuplicate(struct Duplicates * duplicate){
+        duplicate->content = calloc(8, sizeof(char));
+        duplicate->length = 0;
+        duplicate->size = 8;
+}
+
+void loadGroup(struct Backpack * Backpack1, struct Backpack * Backpack2, struct Backpack * Backpack3, FILE * input){
+    loadBackPack(Backpack1, input);
+    loadBackPack(Backpack2, input);
+    loadBackPack(Backpack3, input);
+}
+
+void destroyBackpack(struct Backpack * backpack){
+    free(backpack->leftPart);
+    free(backpack->rightPart);
+    free(backpack->content);
+}
+
 int main(){
-    struct Backpack backpack;
-    backpack.content = calloc(8, sizeof(char));
-    backpack.leftPart = NULL;
-    backpack.rightPart = NULL;
-    backpack.length = 0;
-    backpack.size = 8;
-    
+    struct Backpack firstBackpack;
+    struct Backpack secondBackpack;
+    struct Backpack thirdBackpack;
+
+    initBackpack(&firstBackpack);
+    initBackpack(&secondBackpack);
+    initBackpack(&thirdBackpack);
+
     struct Duplicates duplicates;
-    duplicates.content = calloc(8, sizeof(char));
-    duplicates.length = 0;
-    duplicates.size = 8;
+    initDuplicate(&duplicates);
 
     FILE * input = fopen(filename, "r");
 
-    loadBackPack(&backpack, input);
+    loadGroup(&firstBackpack,&secondBackpack,&thirdBackpack, input);
 
-    while (backpack.content != NULL){
+    while(firstBackpack.content != NULL){
 
         if (duplicates.length >= duplicates.size){
             duplicates.size = duplicates.size * 2;
@@ -123,14 +150,15 @@ int main(){
         duplicates.content[duplicates.length] = findDuplicates(backpack);
         duplicates.length++;
 
-        loadBackPack(&backpack, input);
+        
     }
 
     fclose(input);
 
-    free(backpack.content);
-    free(backpack.leftPart);
-    free(backpack.rightPart);
+    destroyBackpack(&firstBackpack);
+    destroyBackpack(&secondBackpack);
+    destroyBackpack(&thirdBackpack);
+
 
     unsigned long long score = 0;
 
