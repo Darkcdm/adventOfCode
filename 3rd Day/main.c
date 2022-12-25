@@ -83,7 +83,17 @@ char findDuplicates(struct Backpack backpack){
     return 0;
 }
 
-char findTriplicate(struct Backpack backpack1,struct Backpack backpack2, struct Backpack backpack3)
+char findTriplicate(struct Backpack backpack1,struct Backpack backpack2, struct Backpack backpack3){
+    for (int i = 0; i < backpack1.length; i++){
+        for (int j = 0; j < backpack2.length; j++){
+            for (int k = 0; k < backpack3.length; k++){
+                if (backpack1.content[i] == backpack2.content[j] && backpack1.content[i] == backpack3.content[k]){
+                    return backpack1.content[i];
+                }
+            }
+        }
+    }
+}
 
 unsigned long long getScore(char duplicate){
     unsigned long long value;
@@ -147,10 +157,10 @@ int main(){
             duplicates.content = realloc(duplicates.content, sizeof(char)*duplicates.size);
         }
     
-        duplicates.content[duplicates.length] = findDuplicates(backpack);
+        duplicates.content[duplicates.length] = findTriplicate(firstBackpack, secondBackpack, thirdBackpack);
         duplicates.length++;
 
-        
+        loadGroup(&firstBackpack,&secondBackpack,&thirdBackpack, input);
     }
 
     fclose(input);
@@ -162,7 +172,7 @@ int main(){
 
     unsigned long long score = 0;
 
-    for (int i = 0; i < duplicates.length; i++){
+    for (unsigned i = 0; i < duplicates.length; i++){
         score = score + getScore(duplicates.content[i]);
     }
     printf("%llu", score);
