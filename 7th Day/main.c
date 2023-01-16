@@ -6,17 +6,19 @@ struct Directory{
     struct Directory * parent;
     char * name;
     struct Directory * children;
-    unsigned weight;    
-    unsigned size;
-    unsigned capacity;
+    unsigned long weight;    
+    unsigned long size;
+    unsigned long capacity;
 };
 
 void destructDirectory(struct Directory * dir){
 
     if (dir->size == 0){
-        free(dir->name);
-        free(dir->children);
-        free(dir->parent);
+        //free(dir->name);
+        if (dir->capacity != 0){
+            free(dir->children);
+        }
+        dir->parent = NULL;
     }else{
         destructDirectory(&dir->children[dir->size-1]);
         dir->size--;
@@ -46,6 +48,60 @@ void loadWord(char * cursor, char ** buffer, FILE * input){
         *cursor = (char) fgetc(input);
     }
     buffer[0][count] = '\0';
+}
+
+void updateWeights(struct Directory * dir){
+    if(dir->size != 0){
+        for (unsigned long i = 0; i < dir->size; i++){
+            updateWeights(&dir->children[i]);
+        }
+    }
+
+    if (dir->parent != NULL){
+        dir->parent->weight = dir->parent->weight + dir->weight;
+    }
+}
+
+void printFolders(struct Directory * dir){
+    if(dir->size != 0){
+        for(unsigned long i = 0; i < dir->size; i++){
+            printFolders(&dir->children[i]);
+        }
+    }
+    printf("%s = %lu\n", dir->name, dir->weight);
+}
+
+unsigned long printSum(struct Directory * dir){
+    unsigned long SUM = 0;
+
+    if (dir->weight <= 100000){
+        SUM = SUM + dir->weight;
+    }
+
+    for(unsigned long i = 0; i < dir->size; i++){
+        SUM = SUM + printSum(&dir->children[i]);
+    }
+
+    return SUM;
+}
+
+unsigned long printSmol(struct Directory * dir, unsigned long temp){
+    unsigned long SMOL = temp;
+
+    if (dir->weight == 8465165){
+        printf("catch\n");
+    }
+
+    if (dir->weight >= 8381165 && dir->weight <= SMOL){
+        SMOL = dir->weight;
+    }
+    for(unsigned long i = 0; i < dir->size; i++){
+        SMOL = printSmol(&dir->children[i], SMOL);
+
+    }
+
+
+    return SMOL;
 }
 
 int main (){
@@ -78,7 +134,7 @@ int main (){
             else if (!strcmp(arg,"..")){
                 activeDirectory = activeDirectory->parent;
             }else{
-                for(unsigned i=0;i<activeDirectory->size;i++){
+                for(unsigned long i=0;i<activeDirectory->size;i++){
                     if(!strcmp(arg,activeDirectory->children[i].name)){
                         activeDirectory = &activeDirectory->children[i];
                     }
@@ -110,9 +166,9 @@ int main (){
                     activeDirectory->children[activeDirectory->size++] = temp;
 
                 }else{
-                    activeDirectory->weight = activeDirectory->weight + (unsigned) atoi(arg);
+                    activeDirectory->weight = activeDirectory->weight + (unsigned long) atoi(arg);
 
-                    printf("%s weight = %u\n", activeDirectory->name, activeDirectory->weight);
+                    printf("%s weight = %lu\n", activeDirectory->name, activeDirectory->weight);
 
                 }
                 cursor = (char) fgetc(input);
@@ -126,6 +182,19 @@ int main (){
 
     free(buffer);
     free(arg);
+
+    updateWeights(&root);
+
+    printf("\n-------------------------\n");
+
+    printFolders(&root);
+
+    printf("\n%lu\n",printSum(&root));   
+
+    printf("\n%lu\n",printSmol(&root, 70000000));
+
+    printf("\n%lu\n",printSmol(&root, printSmol(&root, 70000000)));
+
 
     destructDirectory(&root);
 
