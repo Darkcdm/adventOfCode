@@ -88,11 +88,7 @@ unsigned long printSum(struct Directory * dir){
 unsigned long printSmol(struct Directory * dir, unsigned long temp){
     unsigned long SMOL = temp;
 
-    if (dir->weight == 8465165){
-        printf("catch\n");
-    }
-
-    if (dir->weight >= 8381165 && dir->weight <= SMOL){
+    if (dir->weight >= 4359867 && dir->weight <= SMOL){
         SMOL = dir->weight;
     }
     for(unsigned long i = 0; i < dir->size; i++){
