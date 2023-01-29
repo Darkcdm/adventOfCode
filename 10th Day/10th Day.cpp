@@ -24,27 +24,110 @@ class Command {
             else {
                 amount = 0;
             }
-            }
+        }
 };
 
+class System {
+public:
+    int cycle = 0;
+    int regX = 1;
+
+    void cycleUp() {
+        cycle++;
+        printPixel();
+        
+    }
+
+    void printPixel() {
+        if (cycle >= regX - 1 && cycle <= regX + 1) {
+            cout << "#";
+        }
+        else {
+            cout << ".";
+        }
+        
+
+        if (cycle % 40 == 0) {
+            cout << endl;
+        }
+    }
+
+    void addRegX(int addValue) {
+        regX = regX + addValue;
+    }
+};
+
+void selectivePrint(int regX, int cycle) {
+    int strength = cycle * regX;
+
+    if (cycle == 20) {
+        cout << strength << endl;
+    }
+    if (cycle == 60) {
+        cout << strength << endl;
+    }
+    if (cycle == 100) {
+        cout << strength << endl;
+    }
+    if (cycle == 140) {
+        cout << strength << endl;
+    }
+    if (cycle == 180) {
+        cout << strength << endl;
+    }
+    if (cycle == 220) {
+        cout << strength << endl;
+    }
+}
 
 int main()
 {
     ifstream input("input.txt");
     string line;
 
-    int cycleCount = 1;
+    int cycle = 0;
+    int regX = 1;
 
-    Command currentComand;
-    
-    while (getline(input, line)) {
-        currentComand.parse(line);
+    bool isCommandRunning = false;
 
-        cout << currentComand.type << "-" << currentComand.amount << endl;
+    int addValue;
+    Command command;
+    System system;
+   
+    int lineCount = 0;
+
+    while (lineCount != 147) {
+
+
+        system.cycleUp();
+
+        if (isCommandRunning) {
+            isCommandRunning = false;
+
+            system.addRegX(addValue);
+        }
+        else {
+            lineCount++;
+            
+            
+            getline(input,line);
+            
+            
+
+            command.parse(line);
+            if (command.type == "addx") {
+                addValue = command.amount;
+                isCommandRunning = true;
+            }
+        }
+        
     }
-
+    
     input.close();
 }
+
+//1 + 15 - 11 + 6 - 3 + 5 - 1 - 8 + 13 + 4 = 21
+//1   16   5    11  8   13  12  4   17   21
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
