@@ -49,6 +49,7 @@ public:
 
         if (cycle % 40 == 0) {
             cout << endl;
+            cycle = 0;
         }
     }
 
@@ -96,7 +97,7 @@ int main()
    
     int lineCount = 0;
 
-    while (lineCount != 147) {
+    while (lineCount != 144) {
 
 
         system.cycleUp();
