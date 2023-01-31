@@ -39,7 +39,7 @@ public:
     }
 
     void printPixel() {
-        if (cycle >= regX - 1 && cycle <= regX + 1) {
+        if (cycle-1 >= regX - 1 && cycle-1 <= regX + 1) {
             cout << "#";
         }
         else {
@@ -112,7 +112,6 @@ int main()
             
             
             getline(input,line);
-            
             
 
             command.parse(line);
