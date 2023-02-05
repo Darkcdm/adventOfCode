@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <list>
 
 using namespace std;
 
@@ -15,11 +16,91 @@ public:
     int testValue;
     int truy;
     int falsy;
+
+};
+
+class Operation {
+public:
+    char operand;
+    int lvalue;
+    int rvalue;
+    
+    int run(int old) {
+
+        if (this->lvalue == 0) {
+            int lvalue = old;
+        }
+        if (this->rvalue == 0) {
+            int rvalue = old;
+        }
+
+
+        switch (operand) {
+        case '+':
+            return lvalue + rvalue;
+            break;
+        case '*':
+            return lvalue * rvalue;
+            break;
+        default:
+            cout << "Error at running operation";
+            break;
+
+        }
+    }
+};
+
+class Items {
+public:
+    int size;
+    int capacity;
+    int* content;
+    void addItem(int newItem) {
+
+        if (this->size == this->capacity) {
+            this->capacity = this->capacity + 10;
+            this->content = (int*) realloc(this->content, sizeof(int)*this->capacity);
+        }
+
+        this->content[this->size] = newItem;
+        this->size++;
+
+    }
+    int* removeItem() {
+        int* returnValue = &this->content[0];
+
+        for (int i = 1; i < this->size; i++) {
+            this->content[i - 1] = this->content[i];
+        }
+        this->size--;
+
+        if (this->size <= this->capacity - 10) {
+            this->capacity= this->capacity - 10;
+            this->content = (int*)realloc(this->content, sizeof(int) * this->capacity);
+        }
+        return returnValue;
+    }
+    void setStartingItems(string startingItems) {
+        this->size = 0;
+        this->capacity = 10;
+        this->content = (int*)calloc(this->capacity, sizeof(Items));
+
+        int cursor = 0;
+
+        while (startingItems.find(',', cursor) != cursor) {
+            this->addItem((int)stoi(startingItems.substr(cursor, startingItems.find(',', cursor))));
+
+            cursor = (int)startingItems.find(',', cursor);
+        }
+        cursor++;
+        this->addItem((int)stoi(startingItems.substr(cursor, startingItems.size())));
+    }
 };
 
 class Monkey {
 public:
-    int *items;
+    Items items;
+    Operation operation;
     Test test;
 };
 
@@ -27,31 +108,42 @@ void parseInput(Monkey **monkeys) {
     ifstream input("input.txt");
     string line;
 
-    for (int count = 0; count < 7; count++) {
-        getline(input, line);
+    int monkeyIndex = 0;
 
-        switch (count) {
-        case 0:
-            //Monkey name
-            break;
-        case 1:
-            line.substr()
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
+    while (getline(input, line)) {
+
+    
+        Monkey* currentMonkey = &monkeys[0][monkeyIndex];
+
+        for (int count = 0; count < 7; count++) {
+            string startingItems;
+
+            switch (count) {
+            case 0:
+                //Monkey name
+                break;
+            case 1:
+                //starting items
+                startingItems = line.substr(17);
+                currentMonkey->items.setStartingItems(startingItems);
+                break;
+            case 2:
+
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
         
-        default:
-            return;
+            default:
+                return;
+            }
+        
+            getline(input, line);
         }
-        
     }
-
     input.close();
 }
 
