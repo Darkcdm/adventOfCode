@@ -17,6 +17,18 @@ public:
     int truy;
     int falsy;
 
+    void setTestValue(int value) {
+        this->testValue = value;
+    }
+
+    void setTruy(int value) {
+        this->truy = value;
+    }
+    
+    void setFalsy(int value) {
+        this->falsy = value;
+    }
+
 };
 
 class Operation {
@@ -24,6 +36,37 @@ public:
     char operand;
     int lvalue;
     int rvalue;
+
+    void SetOperation(string order) {
+        string word;
+        
+        int leftBracket = 1;
+        int rightBracket = order.find(' ', leftBracket);
+
+        word = order.substr(leftBracket, rightBracket);
+
+        if (word.compare("old")) {
+            this->lvalue = 0;
+        }
+        else {
+            this->lvalue = (int)stoi(word);
+        }
+
+        this->operand = order[5];
+        
+        leftBracket = order.rfind(' ');
+        rightBracket = order.size();
+         
+        word = order.substr(leftBracket, rightBracket);
+
+        if (word == "old") {
+            this->rvalue = 0;
+        }
+        else {
+            this->rvalue = (int)stoi(word);
+        }
+
+    }
     
     int run(int old) {
 
@@ -80,6 +123,7 @@ public:
         }
         return returnValue;
     }
+    
     void setStartingItems(string startingItems) {
         this->size = 0;
         this->capacity = 10;
@@ -87,10 +131,10 @@ public:
 
         int cursor = 0;
 
-        while (startingItems.find(',', cursor) != cursor) {
-            this->addItem((int)stoi(startingItems.substr(cursor, startingItems.find(',', cursor))));
+        while (startingItems.find(',', cursor + 1) <= startingItems.size()) {
+            this->addItem( (int) stoi(startingItems.substr(cursor + 1, startingItems.find(',', cursor))));
 
-            cursor = (int)startingItems.find(',', cursor);
+            cursor = (int)startingItems.find(',', cursor+1);
         }
         cursor++;
         this->addItem((int)stoi(startingItems.substr(cursor, startingItems.size())));
@@ -102,6 +146,44 @@ public:
     Items items;
     Operation operation;
     Test test;
+
+    void print(int index) {
+        cout << "Monkey " << index << ":\n";
+        cout << "Starting items : ";
+        
+        for (int i = 0; i < this->items.size; i++) {
+            cout << this->items.content[i] << ", ";
+        }
+        cout << endl;
+  
+        cout << "Operation : new = ";
+        if (this->operation.lvalue == 0) {
+            cout << "old";
+        }
+        else {
+            cout << this->operation.lvalue;
+        }
+
+        cout << " " << this->operation.operand << " ";
+
+        if (this->operation.rvalue == 0) {
+            cout << "old";
+        }
+        else {
+            cout << this->operation.rvalue;
+        }
+
+        cout << endl;
+
+        cout << "Test : divisible by " << this->test.testValue;
+        cout << endl;
+
+        cout << "If true : throw to monkey " << this->test.truy;
+        cout << endl;
+        cout << "If false : throw to monkey " << this->test.falsy;
+        cout << endl;
+        cout << endl;
+    }
 };
 
 void parseInput(Monkey **monkeys) {
@@ -114,35 +196,41 @@ void parseInput(Monkey **monkeys) {
 
     
         Monkey* currentMonkey = &monkeys[0][monkeyIndex];
-
-        for (int count = 0; count < 7; count++) {
+        for (int count = 0; count < 6; count++) {
             string startingItems;
 
             switch (count) {
-            case 0:
-                //Monkey name
-                break;
-            case 1:
-                //starting items
-                startingItems = line.substr(17);
-                currentMonkey->items.setStartingItems(startingItems);
-                break;
-            case 2:
-
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
+                case 0:
+                    //Monkey name
+                    break;
+                case 1:
+                    //starting items
+                    currentMonkey->items.setStartingItems(line.substr(17));
+                    break;
+                case 2:
+                    //setting Operation
+                    currentMonkey->operation.SetOperation(line.substr(18));
+                    break;
+                case 3:
+                    //set testValue
+                    currentMonkey->test.setTestValue((int)stoi(line.substr(line.rfind(' '), line.size())));
+                    break;
+                case 4:
+                    //set outcome of test if true
+                    currentMonkey->test.setTruy((int)stoi(line.substr(line.rfind(' '), line.size())));
+                    break;
+                case 5:
+                    //set outcome of test if false
+                    currentMonkey->test.setFalsy((int)stoi(line.substr(line.rfind(' '), line.size())));
+                    break;
         
-            default:
-                return;
+                default:
+                    return;
             }
-        
             getline(input, line);
         }
+        currentMonkey->print(monkeyIndex);
+        monkeyIndex++;
     }
     input.close();
 }
