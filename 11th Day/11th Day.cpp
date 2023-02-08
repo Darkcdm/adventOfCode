@@ -13,44 +13,53 @@ using namespace std;
 
 class Test {
 public:
-    int testValue;
-    int truy;
-    int falsy;
+    long long testValue;
+    long long truy;
+    long long falsy;
 
-    void setTestValue(int value) {
+    void setTestValue(long long value) {
         this->testValue = value;
     }
 
-    void setTruy(int value) {
+    void setTruy(long long value) {
         this->truy = value;
     }
     
-    void setFalsy(int value) {
+    void setFalsy(long long value) {
         this->falsy = value;
     }
 
+    long long run(long long item) {
+        if (item % this->testValue == 0) {
+            return this->truy;
+        }
+        else {
+            return this->falsy;
+        }
+        return -1;
+    }
 };
 
 class Operation {
 public:
+    long long iteration;
     char operand;
-    int lvalue;
-    int rvalue;
+    long long lvalue;
+    long long rvalue;
 
     void SetOperation(string order) {
         string word;
         
-        int leftBracket = 1;
-        int rightBracket = order.find(' ', leftBracket);
+        this->iteration = 0;
+
+        long long leftBracket = 1;
+        long long rightBracket = order.find(' ', leftBracket);
 
         word = order.substr(leftBracket, rightBracket);
 
-        if (word.compare("old")) {
-            this->lvalue = 0;
-        }
-        else {
-            this->lvalue = (int)stoi(word);
-        }
+
+        this->lvalue = 0;
+
 
         this->operand = order[5];
         
@@ -59,23 +68,30 @@ public:
          
         word = order.substr(leftBracket, rightBracket);
 
-        if (word == "old") {
+        if (word.compare(" old") == 0) {
             this->rvalue = 0;
         }
         else {
-            this->rvalue = (int)stoi(word);
+            this->rvalue = (long long)stoi(word);
         }
 
     }
     
-    int run(int old) {
+    long long run(long long old) {
+        this->iteration++;
+
+        long long lvalue = this->lvalue;
+        long long rvalue = this->rvalue;
+
 
         if (this->lvalue == 0) {
-            int lvalue = old;
+            lvalue = old;
         }
+
         if (this->rvalue == 0) {
-            int rvalue = old;
+            rvalue = old;
         }
+
 
 
         switch (operand) {
@@ -87,39 +103,46 @@ public:
             break;
         default:
             cout << "Error at running operation";
+            return -1;
             break;
 
         }
+        return -1;
     }
 };
 
 class Items {
 public:
-    int size;
-    int capacity;
-    int* content;
-    void addItem(int newItem) {
+    long long size;
+    long long capacity;
+    long long* content;
+    void addItem(long long newItem) {
 
         if (this->size == this->capacity) {
             this->capacity = this->capacity + 10;
-            this->content = (int*) realloc(this->content, sizeof(int)*this->capacity);
+            this->content = (long long*) realloc(this->content, sizeof(long long)*this->capacity);
         }
 
         this->content[this->size] = newItem;
         this->size++;
 
     }
-    int* removeItem() {
-        int* returnValue = &this->content[0];
+    long long removeItem() {
 
-        for (int i = 1; i < this->size; i++) {
+        if (this->size <= 0) {
+            return NULL;
+        }
+
+        long long returnValue = this->content[0];
+
+        for (long long i = 1; i < this->size; i++) {
             this->content[i - 1] = this->content[i];
         }
         this->size--;
 
         if (this->size <= this->capacity - 10) {
             this->capacity= this->capacity - 10;
-            this->content = (int*)realloc(this->content, sizeof(int) * this->capacity);
+            this->content = (long long*)realloc(this->content, sizeof(long long) * this->capacity);
         }
         return returnValue;
     }
@@ -127,17 +150,17 @@ public:
     void setStartingItems(string startingItems) {
         this->size = 0;
         this->capacity = 10;
-        this->content = (int*)calloc(this->capacity, sizeof(Items));
+        this->content = (long long*)calloc(this->capacity, sizeof(Items));
 
-        int cursor = 0;
+        long long cursor = 0;
 
         while (startingItems.find(',', cursor + 1) <= startingItems.size()) {
-            this->addItem( (int) stoi(startingItems.substr(cursor + 1, startingItems.find(',', cursor))));
+            this->addItem( (long long) stoi(startingItems.substr(cursor + 1, startingItems.find(',', cursor))));
 
-            cursor = (int)startingItems.find(',', cursor+1);
+            cursor = (long long)startingItems.find(',', cursor+1);
         }
         cursor++;
-        this->addItem((int)stoi(startingItems.substr(cursor, startingItems.size())));
+        this->addItem((long long)stoi(startingItems.substr(cursor, startingItems.size())));
     }
 };
 
@@ -147,11 +170,20 @@ public:
     Operation operation;
     Test test;
 
-    void print(int index) {
+    void printItems(long long index) {
+        cout << "Monkey " << index <<":";
+
+        for (long long i = 0; i < this->items.size; i++) {
+            cout << this->items.content[i] << ", ";
+        }
+        cout << endl;
+    }
+
+    void print(long long index) {
         cout << "Monkey " << index << ":\n";
         cout << "Starting items : ";
         
-        for (int i = 0; i < this->items.size; i++) {
+        for (long long i = 0; i < this->items.size; i++) {
             cout << this->items.content[i] << ", ";
         }
         cout << endl;
@@ -178,54 +210,54 @@ public:
         cout << "Test : divisible by " << this->test.testValue;
         cout << endl;
 
-        cout << "If true : throw to monkey " << this->test.truy;
-        cout << endl;
-        cout << "If false : throw to monkey " << this->test.falsy;
-        cout << endl;
-        cout << endl;
+cout << "If true : throw to monkey " << this->test.truy;
+cout << endl;
+cout << "If false : throw to monkey " << this->test.falsy;
+cout << endl;
+cout << endl;
     }
 };
 
-void parseInput(Monkey **monkeys) {
+long long parseInput(Monkey** monkeys) {
     ifstream input("input.txt");
     string line;
 
-    int monkeyIndex = 0;
+    long long monkeyIndex = 0;
 
     while (getline(input, line)) {
 
-    
+
         Monkey* currentMonkey = &monkeys[0][monkeyIndex];
-        for (int count = 0; count < 6; count++) {
+        for (long long count = 0; count < 6; count++) {
             string startingItems;
 
             switch (count) {
-                case 0:
-                    //Monkey name
-                    break;
-                case 1:
-                    //starting items
-                    currentMonkey->items.setStartingItems(line.substr(17));
-                    break;
-                case 2:
-                    //setting Operation
-                    currentMonkey->operation.SetOperation(line.substr(18));
-                    break;
-                case 3:
-                    //set testValue
-                    currentMonkey->test.setTestValue((int)stoi(line.substr(line.rfind(' '), line.size())));
-                    break;
-                case 4:
-                    //set outcome of test if true
-                    currentMonkey->test.setTruy((int)stoi(line.substr(line.rfind(' '), line.size())));
-                    break;
-                case 5:
-                    //set outcome of test if false
-                    currentMonkey->test.setFalsy((int)stoi(line.substr(line.rfind(' '), line.size())));
-                    break;
-        
-                default:
-                    return;
+            case 0:
+                //Monkey name
+                break;
+            case 1:
+                //starting items
+                currentMonkey->items.setStartingItems(line.substr(17));
+                break;
+            case 2:
+                //setting Operation
+                currentMonkey->operation.SetOperation(line.substr(18));
+                break;
+            case 3:
+                //set testValue
+                currentMonkey->test.setTestValue((long long)stoi(line.substr(line.rfind(' '), line.size())));
+                break;
+            case 4:
+                //set outcome of test if true
+                currentMonkey->test.setTruy((long long)stoi(line.substr(line.rfind(' '), line.size())));
+                break;
+            case 5:
+                //set outcome of test if false
+                currentMonkey->test.setFalsy((long long)stoi(line.substr(line.rfind(' '), line.size())));
+                break;
+
+            default:
+                return -1;
             }
             getline(input, line);
         }
@@ -233,16 +265,61 @@ void parseInput(Monkey **monkeys) {
         monkeyIndex++;
     }
     input.close();
+
+    return monkeyIndex;
 }
 
 int main()
 {
+    long long ROUNDS = 10000;
+
     Monkey* monkeys = (Monkey*)calloc(10, sizeof(Monkey));
+    long long troopSize = parseInput(&monkeys);
+
+    cout << endl;
 
 
 
-    parseInput(&monkeys);
+    for (long long r = 1; r <= ROUNDS; r++) {
 
+        for (long long i = 0; i < troopSize; i++) {
+            Monkey* selectedMonkey = &monkeys[i];
+
+            while (selectedMonkey->items.size != 0) {
+                long long selectedItem = selectedMonkey->items.removeItem();
+                if (selectedItem != NULL) {
+
+                    selectedItem = selectedMonkey->operation.run(selectedItem);
+                    //selectedItem = selectedItem / 3;
+                    long long targetMonkey = selectedMonkey->test.run(selectedItem);
+                    monkeys[targetMonkey].items.addItem(selectedItem);
+                }
+            }
+
+
+
+
+        }
+
+        /*
+        cout << "round: " << r << endl;
+        for (long long i = 0; i < troopSize; i++) {
+            monkeys[i].printItems(i);
+        }
+        cout << endl;
+        */
+        if (r % 1000 == 0 || r == 1 || r == 20) {
+            for (long long i = 0; i < troopSize; i++) {
+                cout << "Monkey " << i << " :" << monkeys[i].operation.iteration << endl;
+            }
+            cout << endl;
+        }
+    }
+
+    cout << endl;
+    for (long long i = 0; i < troopSize; i++) {
+        cout << "Monkey " << i << " :" << monkeys[i].operation.iteration << endl;
+    }
 
     free(monkeys);
 }
