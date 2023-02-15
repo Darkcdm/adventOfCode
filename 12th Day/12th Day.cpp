@@ -50,10 +50,10 @@ public:
 
 
             this->coords = (int**)realloc(this->coords, sizeof(int*)*size);
-            this->symbols = (char**)realloc(this->coords, sizeof(char*) * size);
+            this->symbols = (char**)realloc(this->symbols, sizeof(char*) * size);
             for (int i = 0; i < size; i++) {
                 this->coords[i] = (int*)realloc(this->coords, sizeof(int) * size);
-                this->symbols[i] = (char*)realloc(this->coords, sizeof(char) * size);
+                this->symbols[i] = (char*)realloc(this->symbols, sizeof(char) * size);
             }
         
     }
@@ -79,20 +79,22 @@ void parseInput(HeightMap * map) {
       
         for (int i = 0; i < line.size(); i++) {
             if (line[i] == 'S') {
-                map->coords[lineCount][i] = 0;
+                //map->coords[lineCount][i] = 0;
                 map->symbols[lineCount][i] = line[i];
             }
             else if(line[i] == 'E') {
-                map->coords[lineCount][i] = 25;
+                //map->coords[lineCount][i] = 25;
                 map->symbols[lineCount][i] = line[i];
             }
             else {
-                map->coords[lineCount][i] = (unsigned char) line[i] - 97;
+                int coordTest = (unsigned char)line[i] - 97;
+                //map->coords[lineCount][i] = (unsigned char) line[i] - 97;
                 map->symbols[lineCount][i] = line[i];
             }
             
         }
 
+        lineCount++;
     }
 
     input.close();
@@ -104,7 +106,7 @@ int main()
 
     parseInput(&map);
 
-    map.printCoords();
+    //map.printCoords();
 
     cout << endl;
 
