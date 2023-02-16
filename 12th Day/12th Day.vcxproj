@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="12th Day.cpp" />
+    <ClCompile Include="12th DayFucked.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="input.txt" />
