@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="12th DayFucked.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="12th Day.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
