@@ -25,14 +25,18 @@ struct Set {
 		this->sets = (Set*)calloc(this->setCap, sizeof(Set));
 	}
 
-	void insertSet(Set set) {
+	Set* insertSet() {
 		if (this->setSize >= this->setCap) {
 			this->setCap += 10;
 			this->sets = (Set*) realloc(this->sets, this->setCap);
 		}
 		
-		this->sets[this->setSize] = set;
+		Set* set = new Set;
+
+		this->sets[this->setSize] = *set;
 		this->setSize ++;
+
+		return &this->sets[this->setSize--];
 	}
 	void insertValue(int value) {
 		if (this->valueSize >= this->valueCap) {
@@ -48,6 +52,10 @@ struct Set {
 struct Packet {
 	Set Left;
 	Set Right;
+
+	void parse(string line) {
+
+	}
 };
 
 string scanForSet() {
@@ -76,12 +84,15 @@ int main() {
 	packets = (Packet*)calloc(cap, sizeof(Packet));
 
 	while (getline(input, line)) {
-		
-		packets[size].Left.insertValue(2);
-		getline(input, line);
+		Set* pastSet = NULL;
+		Set* currentSet = &packets->Left;
 
-		packets[size].Right;
+		for (int charIndex = 0; charIndex < line.size(); charIndex++) {
+			if (line[charIndex] == '[') {
+				currentSet = currentSet->insertSet();
+			}
 
+		}
 		
 		size++;
 	}
