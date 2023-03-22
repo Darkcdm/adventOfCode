@@ -1,3 +1,6 @@
+//yeah this is fucked
+/*
+
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
@@ -35,6 +38,8 @@ struct Set {
 	int cap;
 	int size;
 
+	Value values;
+
 	Set() {
 		this->cap = 10;
 		this->size = 0;
@@ -42,28 +47,52 @@ struct Set {
 	}
 };
 
+/*
 struct Packet {
 	Set set;
-	Value value;
 
 	void load(string line) {
+		string selector;
+
 		for (int i = 0; i < line.size(); i++) {
-			if (line[i] == '[') {
-				//create a new set
+			switch (line[i]) {
+			case '[':
+				//create new set
+
+
+				break;
+			case ']':
+				//end current set
+
+				break;
+			case ',':
+				//save selector as a value
+
+				break;
+			default:
+				//save into the current selector
+
+				break;
 			}
 		}
 	}
+
+	void print() {
+		this->set
+	}
 };
 
+
+
 struct Input {
-	Packet* packets;
+	Set* packets;
 	int cap;
 	int size;
 	
 	Input() {
 		this->size = 0;
 		this->cap = 10;
-		this->packets = (Packet*)calloc(this->cap, sizeof(Packet));
+		this->packets = (Set*)calloc(this->cap, sizeof(Set));
 	}
 
 	void dealloc() {
@@ -74,7 +103,8 @@ struct Input {
 
 	void increase() {
 		this->cap += 10;
-		this->packets = (Packet*)realloc(this->packets, sizeof(Packet)*this->cap);
+		this->packets = (Set*)realloc(this->packets, sizeof(Set)*this->cap);
+
 	}
 
 	void load() {
@@ -84,6 +114,10 @@ struct Input {
 		string line;
 
 		while (getline(input,line)) {
+			if (line.size() == 1) {
+				continue;
+			}
+
 			if (this->size >= this->cap) {
 				this->increase();
 			}
@@ -96,12 +130,23 @@ struct Input {
 
 		input.close();
 	}
+
+	void print() {
+		
+		for (int i = 0; i < this->size; i++) {
+			this->packets[i].print();
+		}
+	}
 };
 
 int main() {
 	Input data;
 
-	
+	data.load();
+
+	data.print();
 
 	data.dealloc();
 }
+
+*/
