@@ -1,8 +1,22 @@
 #include <stdio.h>
 
+struct Elf {
+    long long calories;
+};
+
+struct Group {
+    int size;
+    int cap;
+    struct Elf* array;
+};
+
+
 int main()
 {
-    printf("Hello World!");
+    struct Group group;
+
+
+    
     return 0;
 }
 
