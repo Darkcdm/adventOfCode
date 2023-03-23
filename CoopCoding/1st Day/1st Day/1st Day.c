@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 struct Elf {
     long long calories;
@@ -11,11 +12,24 @@ struct Group {
 };
 
 
+
+
 int main()
 {
-    struct Group group;
+    FILE* input;
+    fopen_s(&input, "input.txt", "r");
 
+    char cursor;
 
+    cursor = (char)fgetc(input);
+
+    while (cursor != EOF) {
+        printf("%c", cursor);
+        cursor = (char)fgetc(input);
+    }
+    
+
+    fclose(input);
     
     return 0;
 }
