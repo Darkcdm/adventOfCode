@@ -1,0 +1,15 @@
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\bin\Debug\net6.0\14th day.exe
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\bin\Debug\net6.0\14th day.deps.json
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\bin\Debug\net6.0\14th day.runtimeconfig.json
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\bin\Debug\net6.0\14th day.dll
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\bin\Debug\net6.0\14th day.pdb
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.csproj.AssemblyReference.cache
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.AssemblyInfoInputs.cache
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.AssemblyInfo.cs
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.csproj.CoreCompileInputs.cache
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.dll
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\refint\14th day.dll
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.pdb
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\14th day.genruntimeconfig.cache
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\CoopCoding\1st Day\14th day\obj\Debug\net6.0\ref\14th day.dll
