@@ -8,105 +8,114 @@
 
 using namespace std;
 
-std::vector<int> parseString(std::string* str) {
-	std::vector<int> result;
-	//Defines index that will go through the string -> i
-	//&
-	//Defines the max length of the string -> n
-	int index = 0, strLength = str->size();
-	//checks that we are not at the end of the file
-	while (index < strLength) {
-		//if the indexed value is open bracket, parse it more
-		if ((*str)[index] == '[') {
-			//j is the index without the first bracket
-			int j = index + 1;
+struct Set {
 
-			//we find the other bracket ("]")
-			while (j < strLength && (*str)[j] != ']') j++;
-			if (j == strLength) {
-				std::cerr << "Error: unmatched '['" << std::endl;
-				return result;
-			}
-			std::string sub = str->substr(index + 1, j - index);
-			std::vector<int> subResult = parseString(&sub);
-			result.insert(result.end(), subResult.begin(), subResult.end());
-			index = j + 1;
-		}
-		else if ((*str)[index] == ',') {
-			index++;
-		}
-		else if (isdigit((*str)[index])) {
-			int j = index + 1;
-			while (j < strLength && isdigit((*str)[j])) j++;
-			int value = std::stoi(str->substr(index, j - index));
-			result.push_back(value);
-			index = j;
-		}
-		else {
-			std::cerr << "Error: invalid character '" << (*str)[index] << "'" << std::endl;
-			return result;
-		}
-	}
-	str->erase(0, index);
-	return result;
-}
+	string original;
+	string bracketMap;
+	int value;
+	int rightIndex;
+	int leftIndex;
 
-vector<int> parseLine(string* str) {
-	vector<int> result;
-
-	int index = 0;
-
-	while (index < str->length()) {
-		if ((*str)[index] == '[') {
-
-		}
+	Set(string str) {
+		this->original = str;
+		this->bracketMap = this->markBrackets(str);
+		this->value = NULL;
+		this->rightIndex = 0;
+		this->leftIndex = 0;
 	}
 
-	str->erase(str->begin(), str->begin()+1);
-	str->erase(str->end()-1, str->end());
+	int getValue() {
+		this->leftIndex = this->rightIndex;
 
-	return result;
-}
+		this->rightIndex = this->original.find(',', leftIndex);
 
-int findPairBracket(string str, int bracketPosition) {
-	bracketPosition++;
-	while (bracketPosition < str.size()) {
-		if (str[bracketPosition] == ']') {
-			break;
-		}
-		if (str[bracketPosition] == '[') {
-			bracketPosition = findPairBracket(str, bracketPosition);
-		}
+		this->value = stoi(this->original.substr(leftIndex, rightIndex));
 
+		return this->value;
+	}
+	int getSet() {
+
+	}
+
+	int findPairBracket(string str, int bracketPosition) {
 		bracketPosition++;
+		while (bracketPosition < str.size()) {
+			if (str[bracketPosition] == ']') {
+				break;
+			}
+			if (str[bracketPosition] == '[') {
+				bracketPosition = findPairBracket(str, bracketPosition);
+			}
+
+			bracketPosition++;
+		}
+
+		return bracketPosition;
 	}
 
-	return bracketPosition;
-}
+	string markBrackets(string str) {
+		string output = str;
+		int index = 0;
 
-bool compareSets(string leftSet, string rightSet) {
+		for (int i = 0; i < str.size(); i++) {
+			if (str[i] == '[') {
+				int j = this->findPairBracket(str, i);
 
+				output[i] = 97 + index;
+				output[j] = 97 + index;
+				index++;
+			}
+		}
+
+		return output;
+	}
+
+
+
+};
+
+int compareSets(Set left, Set right) {
+	cout << "-Compare" << left.original <<" vs" << right.original << endl;
+
+
+	if (left.getValue() < right.getValue()) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+
+	
+	return 0;
 }
 
 int main() {
-	string test = "[[1], [2, 3, 4]]";
-	string output = test;
-	int index = 0;
 
-	for (int i = 0; i < test.size(); i++) {
-		if (test[i] == '[') {
-			int j = findPairBracket(test, i);
-		
-			output[i] = 97 + index;
-			output[j] = 97 + index;
-			index++;
-		}
+	Set left("[1,1,3,1,1]");
+	Set right("[1,1,5,1,1]");
 
+	cout << left.original << endl;
+	cout << left.bracketMap << endl << endl;
 
+	cout << right.original << endl;
+	cout << right.bracketMap << endl;
+
+	cout <<endl<< "== Pair 1 ==" <<endl;
+	
+	int check = compareSets(left, right);
+	if (check == -1) {
+		cout << "YOU FUCKED UP COMPARING";
+		return 1;
 	}
-
-	cout << test << endl;
-	cout << output << endl;
+	if (check) {
+		cout << "Left side is smaller, so inputs are in the right order" << endl;
+		return 0;
+	}
+	else {
+		cout << "Right side is smaller, so inputs are not in the right order" << endl;
+		return 0;
+	}
+	
 
 	return 0;
 }
