@@ -27,12 +27,25 @@ struct Set {
 	int getValue() {
 		this->leftIndex = this->rightIndex;
 
-		this->rightIndex = this->original.find(',', leftIndex);
+		if (rightIndex + 1 == this->original.size()) {
+			value = NULL;
+			return -2;
+		}
 
-		this->value = stoi(this->original.substr(leftIndex, rightIndex));
+		if (this->original[rightIndex + 1] == '[') {
+			this->value = -1;
+			return -1;
+		}
+
+		this->rightIndex = this->original.find(',', leftIndex+1);
+
+		
+
+		this->value = stoi(this->original.substr(leftIndex+1, rightIndex));
 
 		return this->value;
 	}
+
 	int getSet() {
 
 	}
@@ -77,13 +90,28 @@ struct Set {
 int compareSets(Set left, Set right) {
 	cout << "-Compare" << left.original <<" vs" << right.original << endl;
 
+	left.getValue();
+	right.getValue();
 
-	if (left.getValue() < right.getValue()) {
-		return 1;
+	
+
+	while (left.value != -2 || right.value != -2) {
+
+
+		cout << "- Compare " << left.value << " vs " << right.value << endl;
+
+		if (left.value < right.value) {
+			return 1;
+		}
+		if (left.value > right.value){
+			return 0;
+		}
+
+		left.getValue();
+		right.getValue();
 	}
-	else {
-		return 0;
-	}
+
+
 
 	
 	return 0;
@@ -91,8 +119,8 @@ int compareSets(Set left, Set right) {
 
 int main() {
 
-	Set left("[1,1,3,1,1]");
-	Set right("[1,1,5,1,1]");
+	Set left("[[1],[2,3,4]]");
+	Set right("[[1],4]");
 
 	cout << left.original << endl;
 	cout << left.bracketMap << endl << endl;
