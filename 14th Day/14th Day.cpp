@@ -33,6 +33,34 @@ struct Cell {
 	}
 };
 
+struct simPlace {
+	Cell** cells;
+	int depth;
+	int width; 
+
+	simPlace() {
+		this->cells = (Cell**) calloc(1, sizeof(Cell*));
+		this->cells[0] = (Cell*)calloc(1, sizeof(Cell));
+	
+		this->depth = 1;
+		this->depth = 1;
+	}
+
+	void reserveWidth(int index, int order) {
+		
+	}
+	void reserveDepth(int order) {
+		this->cells = (Cell**)realloc(this->cells, order);
+	}
+
+	void kill() {
+		for (int y = 0; y < this->depth; y++) {
+			free(this->cells[y]);
+		}
+		free(this->cells);
+	}
+};
+
 //returns Top Left and Bottom Right Coords
 vector<int> parseDimension() {
 	vector<int> results;
@@ -102,7 +130,7 @@ vector<int> parseDimension() {
 	return results;
 }
 
-void printCave(vector<vector<Cell>> cave) {
+void printCave(simPlace cave) {
 	for (int y = 0; y < cave.size(); y++) {
 		for (int x = 0; x < cave[y].size(); x++) {
 			cout << cave[y][x].symbol;
@@ -111,10 +139,14 @@ void printCave(vector<vector<Cell>> cave) {
 	}
 }
 
-vector<vector<Cell>> createCave(int depth, int width, int leftX) {
+simPlace createCave(int depth, int width, int leftX) {
 	vector<vector<Cell>> result;
 
-	result.resize(depth);
+	//result.resize(depth);
+	result.reserve(depth);
+	
+
+	
 
 	//create the space
 	for (int y = 0; y < depth; y++) {
@@ -135,7 +167,7 @@ vector<vector<Cell>> createCave(int depth, int width, int leftX) {
 
 
 
-
+	
 	ifstream input;
 	string line;
 	input.open("input.txt");
@@ -238,6 +270,8 @@ vector<vector<Cell>> createCave(int depth, int width, int leftX) {
 	}
 
 	input.close();
+	
+
 	return result;
 
 }
@@ -245,7 +279,7 @@ vector<vector<Cell>> createCave(int depth, int width, int leftX) {
 int main() {
 	vector<int> dimensions = parseDimension();
 
-	vector<vector<Cell>> cave = createCave(dimensions[3], dimensions[2] - dimensions[0] + 2, dimensions[0] - 1);
+	simPlace cave = createCave(dimensions[3], dimensions[2] - dimensions[0] + 2, dimensions[0] - 1);
 
 	cout << dimensions[0] << ", ";
 	cout << dimensions[1] << ", ";
