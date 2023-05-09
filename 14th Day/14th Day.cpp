@@ -33,6 +33,7 @@ struct Cell {
 	}
 };
 
+/*
 struct simPlace {
 	Cell** cells;
 	int depth;
@@ -60,6 +61,8 @@ struct simPlace {
 		free(this->cells);
 	}
 };
+*/
+
 
 //returns Top Left and Bottom Right Coords
 vector<int> parseDimension() {
@@ -76,20 +79,20 @@ vector<int> parseDimension() {
 
 		while (rightIndex != line.size()) {
 			leftIndex = rightIndex;
-			rightIndex = line.find(' ', leftIndex + 1);
+			rightIndex = (int) line.find(' ', leftIndex + 1);
 
 			if (rightIndex == -1) {
-				rightIndex = line.size();
+				rightIndex = (int)line.size();
 			}
 
 			string coords = line.substr(leftIndex, rightIndex - leftIndex);
 
 			if (coords[1] == '-') {
 				leftIndex = rightIndex;
-				rightIndex = line.find(' ', leftIndex + 1);
+				rightIndex = (int) line.find(' ', leftIndex + 1);
 
 				if (rightIndex == -1) {
-					rightIndex = line.size();
+					rightIndex = (int) line.size();
 				}
 
 				coords = line.substr(leftIndex, rightIndex - leftIndex);
@@ -130,7 +133,7 @@ vector<int> parseDimension() {
 	return results;
 }
 
-void printCave(simPlace cave) {
+void printCave(vector<vector<Cell>> cave) {
 	for (int y = 0; y < cave.size(); y++) {
 		for (int x = 0; x < cave[y].size(); x++) {
 			cout << cave[y][x].symbol;
@@ -139,18 +142,21 @@ void printCave(simPlace cave) {
 	}
 }
 
-simPlace createCave(int depth, int width, int leftX) {
-	vector<vector<Cell>> result;
+vector<vector<Cell>> createCave(int depth, int width, int leftX) {
+	vector<vector<Cell>> result (depth, vector<Cell>(width));
 
 	//result.resize(depth);
-	result.reserve(depth);
+	//result.reserve((size_t) depth);
 	
 
 	
 
 	//create the space
 	for (int y = 0; y < depth; y++) {
+		vector<Cell> line;
 		for (int x = 0; x < width; x++) {
+			
+
 			Cell newCell(x, y, leftX + x, y);
 			//place source
 			if (leftX + x == 500 && y == 0) {
@@ -158,8 +164,9 @@ simPlace createCave(int depth, int width, int leftX) {
 				newCell.symbol = '+';
 			}
 
-			result[y].push_back(newCell);
+			line.push_back(newCell);
 		}
+		result.push_back(line);
 	}
 
 
@@ -186,11 +193,11 @@ simPlace createCave(int depth, int width, int leftX) {
 		points.resize(4);
 
 		leftIndex = rightIndex;
-		rightIndex = line.find(' ', leftIndex + 1);
+		rightIndex = (int)line.find(' ', leftIndex + 1);
 
 		//fix shit if you're at the end
 		if (rightIndex == -1) {
-			rightIndex = line.size();
+			rightIndex = (int)line.size();
 		}
 
 		string coords = line.substr(leftIndex, rightIndex - leftIndex);
@@ -198,10 +205,10 @@ simPlace createCave(int depth, int width, int leftX) {
 		//if you're in the middle then cross out the arrow
 		if (coords[1] == '-') {
 			leftIndex = rightIndex;
-			rightIndex = line.find(' ', leftIndex + 1);
+			rightIndex = (int)line.find(' ', leftIndex + 1);
 
 			if (rightIndex == -1) {
-				rightIndex = line.size();
+				rightIndex = (int) line.size();
 			}
 
 			coords = line.substr(leftIndex, rightIndex - leftIndex);
@@ -225,11 +232,11 @@ simPlace createCave(int depth, int width, int leftX) {
 			points[1] = points[3];
 
 			leftIndex = rightIndex;
-			rightIndex = line.find(' ', leftIndex + 1);
+			rightIndex = (int)line.find(' ', leftIndex + 1);
 
 			//fix shit if you're at the end
 			if (rightIndex == -1) {
-				rightIndex = line.size();
+				rightIndex = (int)line.size();
 			}
 
 			coords = line.substr(leftIndex, rightIndex - leftIndex);
@@ -237,10 +244,10 @@ simPlace createCave(int depth, int width, int leftX) {
 			//if you're in the middle then cross out the arrow
 			if (coords[1] == '-') {
 				leftIndex = rightIndex;
-				rightIndex = line.find(' ', leftIndex + 1);
+				rightIndex = (int)line.find(' ', leftIndex + 1);
 
 				if (rightIndex == -1) {
-					rightIndex = line.size();
+					rightIndex = (int)line.size();
 				}
 
 				coords = line.substr(leftIndex, rightIndex - leftIndex);
@@ -279,7 +286,7 @@ simPlace createCave(int depth, int width, int leftX) {
 int main() {
 	vector<int> dimensions = parseDimension();
 
-	simPlace cave = createCave(dimensions[3], dimensions[2] - dimensions[0] + 2, dimensions[0] - 1);
+	vector<vector<Cell>> cave = createCave(dimensions[3], dimensions[2] - dimensions[0] + 2, dimensions[0] - 1);
 
 	cout << dimensions[0] << ", ";
 	cout << dimensions[1] << ", ";
