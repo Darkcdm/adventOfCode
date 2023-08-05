@@ -15,12 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="input.txt">
+    <Text Include="test_input.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="true_input.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="15th Day.cpp">
+    <ClCompile Include="16th Day.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

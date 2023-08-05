@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{45190a26-7bbd-4283-baba-bc12c2a45bb9}</ProjectGuid>
-    <RootNamespace>My15thday</RootNamespace>
+    <ProjectGuid>{cdf2d2a2-c205-44d2-b560-fd82ca6b29ba}</ProjectGuid>
+    <RootNamespace>My16thDay</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,10 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="input.txt" />
+    <Text Include="test_input.txt" />
+    <Text Include="true_input.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="15th Day.cpp" />
+    <ClCompile Include="16th Day.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
