@@ -24,7 +24,7 @@ void setInputs(bool setCheck) {
 	}
 }
 
-void sortInputFile() {
+vector <Valve> parseInputFile() {
 	fstream input;
 	input.open(inputName);
 
@@ -83,21 +83,49 @@ void sortInputFile() {
 	}
 
 	vector <string> nameList;
+	vector <int> flowList;
+	vector <string> routesList;
 
 	for (size_t i = 0; i < lines.size(); i++) {
 		nameList.push_back(lines[i].substr(6, 2));
+		string flowString = lines[i].substr(lines[i].find('=') + 1,lines[i].find(';') - 1 - lines[i].find('='));
+
+		flowList.push_back(stoi(flowString));
+
+		routesList.push_back(lines[i].substr(lines[i].find("valves") + 7, lines[i].size() - lines[i].find("valves")));
+
+		cout << routesList[i] << endl;
 	}
 
-	for (size_t i = 0; i < lines.size(); i++) {
-		
+
+	vector<Valve> valves;
+
+	for (size_t i = 0; i < nameList.size(); i++) {
+
+		Valve valve;
+
+		valve.name = nameList[i];
+		valve.flow = flowList[i];
+
+
+		string routeString = routesList[i];
+
+
+
+
+		valves.push_back(valve);
+
 	}
+	return valves;
 
 }
 
 int main(){
+
+	vector <Valve> valves;
 	setInputs(1);
 
-	sortInputFile();
+	valves = parseInputFile();
 
 
 	return 0;
