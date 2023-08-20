@@ -149,6 +149,7 @@ vector <Valve> sortInputFile() {
 	
 		result.push_back(valve);
 	}
+	return valves;
 
 	
 	return result;
