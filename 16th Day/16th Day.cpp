@@ -210,83 +210,12 @@ bool isVisitedOrOpen(list<pair<int, bool>> & visited_path, int id) {
 }
 
 
-int maxDjikstra(vector<shared_ptr<Node>> & nodes, shared_ptr<Node> start) {
-	// Initialization
-	uint8_t minutes = 30;
-	vector<shared_ptr<Node>> predecessors;
-	start->weight = 0;
-	start->path_length = 0;
-	queue<shared_ptr<Node>> q;
-	q.push(start);
-	while(!q.empty()) {
-		// Pop the first element
-		shared_ptr<Node> current = q.front();
-		q.pop();
-		// Iterate through neighbors
-		for (pair<shared_ptr<Node>, bool> neighbor : current->neighbors) {
-			// If going through the "opening edge"
-			if (neighbor.second) {
-				// If current path is better than the previous one (weight with flow of destination node is less than current weight + minutes*current_flow)
-				if (neighbor.first->weight < current->weight + minutes*current->flow && current->path_length < 30) {
-					// Update the weight of the destination node
-					neighbor.first->weight = current->weight + minutes*current->flow;
-					// Save the predecessor
-					predecessors.push_back(current);
-					// Update the path length (minutes spent on the path)
-					neighbor.first->path_length = current->path_length + 2;
-					// Set the node as open to prevent opening the same node twice
-					current->isOpen = true;
-					// Push the node to the queue
-					q.push(neighbor.first);
-				}
-			// If going through the "closing edge"	
-			} else {
-				// If current path is better than the previous one (weight of destination node is less than current weight)
-				if (neighbor.first->weight < current->weight && current->path_length < 30) {
-					// Update the weight of the destination node
-					neighbor.first->weight = current->weight;
-					// Save the predecessor
-					predecessors.push_back(current);
-					// Update the path length (minutes spent on the path)
-					neighbor.first->path_length = current->path_length + 1;
-					// NOT SETTING IS OPEN, SINCE WE JUST "VISITED" THE NODE, NOT OPENED IT
-					// Push the node to the queue
-					q.push(neighbor.first);
-				}
-			}
-		}
-	}
-	// Find the node with the highest weight
-	shared_ptr<Node> maxNode;
-	for (shared_ptr<Node> node : nodes) {
-		if (node->weight > maxNode->weight) {
-			maxNode = node;
-		}
-	}
-	// Return the result
-	return maxNode->weight;
-	//TODO return also predecessors and use them to reconstruct the path (go through predecessors until you reach the start node) P.S. Fakt nevim jestli vector predchudcu bude fungovat kvuli moznym cyklum
-	// P.S. 2: Kouknul bych se na jine algoritmy a zpusoby rekonstrukce cesty pro grafy s cyklickymi cestami
+int longDjikstra(vector <Valve> input) {
+	int longestPath = -1;
+
+	return longestPath;
 }
 
-//Convert valve vector to node vector
-vector<shared_ptr<Node>> valveToNode(vector<Valve> & valve_vector) {
-	vector<shared_ptr<Node>> result_vector = {};
-	// Create nodes
-	for (Valve valve : valve_vector) {
-		shared_ptr<Node> n = make_shared<Node>(Node(valve.id, valve.flow));
-		result_vector.push_back(n);
-	}
-	// Add the neighbors (one edge for closed, one for open)
-	for (size_t i = 0; i < valve_vector.size(); i++) {
-		Valve valve = valve_vector[i];
-		for(size_t j = 0; j < valve.routes.size(); j++) {
-			result_vector[i]->neighbors.push_back({result_vector[valve.routes[j]], true});
-			result_vector[i]->neighbors.push_back({result_vector[valve.routes[j]], false}); // jsem dement, dal jsem tam {} xd
-		}
-	}
-	return result_vector;
-}
 
 int main(){
 	setInputs(0); // Musim pracovat, ale doma bych se kouknul jak vypada ten node graph, jestli se spravne nacetl
@@ -294,15 +223,9 @@ int main(){
 	//vector<Valve> testGraph = generateTestInput();
 
 	vector <Valve> testGraph = sortInputFile();
-	vector <shared_ptr<Node>> node_vector = valveToNode(testGraph);
-	shared_ptr<Node> start_node;
-  for (shared_ptr<Node> node : node_vector) {d
-		if (node->id == testGraph[0].id) {
-			start_node = node;
-		}
-	}
 
-	cout << maxDjikstra(node_vector, start_node) << endl;
+
+	cout << "result is: " << longDjikstra(testGraph) << endl;
 
 	return 0;
 }
