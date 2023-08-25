@@ -19,29 +19,27 @@ struct Valve{
 	vector <int> routes;
 };
 
+
+
 struct Node {
 	uint32_t id;
 	uint32_t flow;
 	bool isOpen;
 	bool visited;
 	uint32_t weight = -1;
-	uint32_t path_length = -1;
+	uint32_t path = -1;
 
-	vector< pair< shared_ptr<Node>, bool >> neighbors;
-	Node(uint32_t id, uint32_t flow, bool isOpen = false) : id(id), flow(flow), isOpen(isOpen) {
+
+	vector<Node*> neighbors;
+	Node(uint32_t id, uint32_t flow, bool isOpen = false, bool visited = false) : id(id), flow(flow), isOpen(isOpen), visited(visited) {
 		neighbors = {};
+		path = 1;
+		if (flow > 0) {
+			path = 2 + flow;
+		}
+		
 	}
 };
-//TODO1 Create nodes from input
-//TODO2 Create edges from input
-//  - Create 2 edges from each node - one for open, one for closed
-// Examples of creating shared pointers
-// auto p = shared_ptr<Node>(new Node);
-// shared_ptr<Node> p2 = make_shared<Node>(n1);
-//TODO3 Traverse graph while keeping minutes using "Djikstra's algorithm" but for max flow
-
-
-
 
 void setInputs(bool setCheck) {
 	if (setCheck) {
@@ -209,9 +207,84 @@ bool isVisitedOrOpen(list<pair<int, bool>> & visited_path, int id) {
 	return false;
 }
 
+bool checkAllVisited(vector<Node> nodes) {
+
+	for (size_t i = 0; i < nodes.size(); i++) {
+		if (!nodes[i].visited) {
+			return true;
+		}
+	}
+	return false;
+}
+
+vector <Node> transformInputToNodes(vector<Valve> input) {
+	vector <Node> result;
+
+	for (size_t i = 0; i < input.size(); i++) {
+		Node node(input[i].id, input[i].flow);
+
+		result.push_back(node);
+	}
+
+	for (size_t i = 0; i < result.size(); i++) {
+		for (size_t iN = 0; iN < input[i].routes.size(); iN++) {
+			result[i].neighbors.push_back(&result[input[i].routes[iN]]);
+		}
+	}
+
+	return result;
+}
+
+
+Node* getHighestWeightNode(vector <Node *> nodes) {
+
+	Node* maxWeightNode = nodes[0];
+
+	
+	for (size_t i = 0; i < nodes.size(); i++) {
+		if (nodes[i]->weight > maxWeightNode->weight && !nodes[i]->visited) {
+			maxWeightNode = nodes[i];
+		}
+	}
+
+	return maxWeightNode;
+}
 
 int longDjikstra(vector <Valve> input) {
 	int longestPath = -1;
+
+	vector <Node> nodes = transformInputToNodes(input);
+
+	Node* currentNode = &nodes[0];
+	currentNode->weight = 0;
+	Node* selectedNode;
+	while (checkAllVisited(nodes)) {
+
+		for (size_t i = 0; i < currentNode->neighbors.size(); i++) {
+
+			selectedNode = currentNode->neighbors[i];
+			//point of possible change
+			if (selectedNode->weight == -1 || selectedNode->weight > selectedNode->path + currentNode->weight) {
+				selectedNode->weight = selectedNode->path + currentNode->weight;
+			}
+
+			selectedNode->weight = selectedNode->path;
+
+		}
+
+		currentNode->visited = true;
+
+		cout << currentNode->id << " -> Check" << endl;
+		/*
+		if (currentNode->flow > 0) {
+			currentNode->isOpen = true;
+			currentNode->path = 1;
+		}
+		*/
+
+		currentNode = getHighestWeightNode(currentNode->neighbors);
+
+	}
 
 	return longestPath;
 }
