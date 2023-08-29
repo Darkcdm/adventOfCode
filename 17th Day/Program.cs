@@ -1,11 +1,14 @@
 ﻿using System;
 
-namespace AoC17 {
+namespace _17th_Day {
     class Program {
         static void Main() {
             Console.WriteLine("Starting the program");
 
-            var result = -1; 
+            Cave cave = new Cave();
+
+            var result = cave.simulateRockHeightLimit(2, true);
+
 
             Console.WriteLine("Result is: " + result);
             Console.WriteLine("Ending the program");
