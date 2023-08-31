@@ -9,12 +9,20 @@ namespace _17th_Day {
 
         private int width;
         private int height;
-        private int rockCount;
+        private int rockCount = 0;
+        private int solidRockCount = 0;
         public List<List<Cell>> grid;
+
+        public int Height{
+            get { return height; }
+        }
+        public int Width {
+            get { return width; }
+        }
 
         public Cave () {
             this.width = 7;
-            this.height = 4;
+            this.height = 10;
 
             grid = new List<List<Cell>>();
 
@@ -44,8 +52,9 @@ namespace _17th_Day {
             }
 
         }
+        
         public void printCave (){
-            for (int y = 0; y < height; y++) {
+            for (int y = this.height-1; y >= 0; y--) {
                 Console.Write('|');
                 for (int x = 0; x < width; x++) {
                     grid[y][x].printCell();
@@ -58,12 +67,35 @@ namespace _17th_Day {
             }
             Console.Write("+\n");
         }
+
         public int simulateRockHeightLimit(int rockMax, bool printout) {
             int result = 0;
             Rocks rocks = new Rocks();
-            while (rockCount < rockMax) {
-                Rock rock = rocks.getGrain(); //TESTING 
+            Rock rock = rocks.getGrain(grid, getHighestPoint()); //TESTING
+            rockCount++;
 
+            Input input = new Input();
+
+            while (solidRockCount <= rockMax) {
+
+                
+                
+                if (rock.Stationary) {
+                    rock = rocks.getGrain(grid, getHighestPoint());
+                    rockCount++;
+                } else {
+                    char dirChar = input.TestTextChar; //TESTING
+                    Console.WriteLine(dirChar);
+                  //  solidRockCount += rock.moveSide(grid, dirChar);
+                    solidRockCount += rock.moveDown(grid);
+
+
+                }
+           
+                if (printout) {
+                    printCave();
+                }
+                
             }
 
             return result;
@@ -77,13 +109,13 @@ namespace _17th_Day {
                     }
                 }
             }
-            return 0;
+            return height-2;
         }
     }
 
     public class Cell {
-        int X;
-        int Y;
+        public int X;
+        public int Y;
         private bool occupied;
         private bool solid;
 
@@ -109,11 +141,11 @@ namespace _17th_Day {
         }
 
         public void printCell() {
+            if (solid) {
+                Console.Write('#');
+                return;
+            }
             if (occupied) {
-                if (solid) {
-                    Console.Write('#');
-                    return;
-                }
                 Console.Write('@');
                 return;
             }
