@@ -22,7 +22,7 @@ namespace _17th_Day {
 
         public Cave () {
             this.width = 7;
-            this.height = 10;
+            this.height = 5;
 
             grid = new List<List<Cell>>();
 
@@ -43,7 +43,7 @@ namespace _17th_Day {
             while (this.height < height) {
                 List<Cell> line = new List<Cell>();
                 for (int x = 0; x < width; x++) {
-                    Cell cell = new Cell(x, this.height + 1);
+                    Cell cell = new Cell(x, this.height);
 
                     line.Add(cell);
                 }
@@ -69,36 +69,56 @@ namespace _17th_Day {
         }
 
         public int simulateRockHeightLimit(int rockMax, bool printout) {
-            int result = 0;
+
+
             Rocks rocks = new Rocks();
             Rock rock = rocks.getGrain(grid, getHighestPoint()); //TESTING
             rockCount++;
 
             Input input = new Input();
 
-            while (solidRockCount <= rockMax) {
+            while (solidRockCount < rockMax) {
 
-                
-                
+
+
                 if (rock.Stationary) {
-                    rock = rocks.getGrain(grid, getHighestPoint());
+
+                    int maxY = getHighestPoint();
+
+                    if (maxY + 4 >= height)
+                    {
+                        addHeight(5);
+                    }
+
+                    rock = rocks.getGrain(grid, maxY);
                     rockCount++;
                 } else {
                     char dirChar = input.TestTextChar; //TESTING
-                    Console.WriteLine(dirChar);
-                  //  solidRockCount += rock.moveSide(grid, dirChar);
+
+                    if (printout)
+                    {
+                        Console.WriteLine(dirChar);
+
+                    }
+
+                    solidRockCount += rock.moveSide(grid, dirChar);
                     solidRockCount += rock.moveDown(grid);
 
 
                 }
-           
-                if (printout) {
+
+                if (printout)
+                {
+                    //Console.Clear();
+
                     printCave();
+
+                    //System.Threading.Thread.Sleep(100);
                 }
-                
+
             }
 
-            return result;
+            return getHighestPoint()+1;
         }
 
         private int getHighestPoint() {
@@ -109,7 +129,7 @@ namespace _17th_Day {
                     }
                 }
             }
-            return height-2;
+            return 0;
         }
     }
 

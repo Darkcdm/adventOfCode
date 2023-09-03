@@ -75,25 +75,34 @@ namespace _17th_Day {
 
             List<Cell> newCells = new List<Cell>();
 
-            while (cells.Count > 0 && !stationary) {
-                Cell selectedCell = cells[0];
-                cells.RemoveAt(0);
 
-                if (selectedCell.X == 0 || selectedCell.X == grid[0].Count - 1) {
-                    newCells.Add(selectedCell);
-                    continue;
+            if (!stationary)
+            {
+                foreach (Cell selectedCell in cells)
+                {
 
-                } else {
-                    selectedCell.Occupied = false;
+                    
 
-                    Cell newCell = grid[selectedCell.Y][selectedCell.X + dirValue];
 
-                    newCell.Occupied = true;
+                    //is not at side and the looked at cell is not already occupied 
+                    if (selectedCell.X + dirValue < 0 || selectedCell.X + dirValue > grid[0].Count - 1 || grid[selectedCell.Y][selectedCell.X + dirValue].Occupied)
+                    {
+                        newCells.Add(selectedCell);
+                        continue;
 
-                    newCells.Add(newCell);
+                    }
+                    else
+                    {
+                        selectedCell.Occupied = false;
 
+                        Cell newCell = grid[selectedCell.Y][selectedCell.X + dirValue];
+
+                        newCell.Occupied = true;
+
+                        newCells.Add(newCell);
+
+                    }
                 }
-
             }
             cells = newCells;
 
@@ -108,8 +117,10 @@ namespace _17th_Day {
                 Cell selectedCell = cells[0];
                 cells.RemoveAt(0);
 
-                if (selectedCell.Y == 0 || grid[selectedCell.Y - 1][selectedCell.X].Solid) {
-                    this.makeSolid();
+                if (selectedCell.Y == 0 || grid[selectedCell.Y - 1][selectedCell.X].Solid || grid[selectedCell.Y-1][selectedCell.X].Occupied)
+                {
+                    selectedCell.Solid = true;
+                    makeSolid();
                     newCells.Add(selectedCell);
                     stationary = true;
 
@@ -148,10 +159,7 @@ namespace _17th_Day {
          */
         public Grain(List<List<Cell>> grid, int y) {
 
-            if (y > 0) {
-                y -= 3;
-            }
-            Cell cell = grid[y][2];
+            Cell cell = grid[y+4][2];
             cell.Occupied = true;
             cells.Add(cell);
 

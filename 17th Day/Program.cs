@@ -7,7 +7,7 @@ namespace _17th_Day {
 
             Cave cave = new Cave();
 
-            var result = cave.simulateRockHeightLimit(1, true);
+            var result = cave.simulateRockHeightLimit(250, false);
 
 
             Console.WriteLine("Result is: " + result);
