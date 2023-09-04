@@ -72,7 +72,7 @@ namespace _17th_Day {
 
 
             Rocks rocks = new Rocks();
-            Rock rock = rocks.getGrain(grid, getHighestPoint()); //TESTING
+            Rock rock = rocks.getRock(grid, getHighestPoint()); //TESTING
             rockCount++;
 
             Input input = new Input();
