@@ -13,23 +13,24 @@ namespace _17th_Day {
 
 	public class Rocks {
 		
-		private int rockIndex = 0;
+		private int rockIndex = 4;
 		private int RockIndex {
 			
-			get { return rockIndex; }
-			set{
-				if (rockIndex == 4) {
-					rockIndex = 0;
-				} else {
-					rockIndex++;
-				}
-			}
+			get {
+                if (rockIndex == 4) {
+                    rockIndex = 0;
+                } else {
+                    rockIndex++;
+                }
+
+
+                return rockIndex; }
 		}
 
 
 		public Rock getRock(List<List<Cell>> grid, int y) {
-			switch (rockIndex) {
-				case 0:
+			switch (RockIndex) {
+				case 0:		
 					return new Line(grid, y);
 				case 1:
 					return new Cross(grid, y);
@@ -63,7 +64,45 @@ namespace _17th_Day {
 			set { stationary = value; }
 		}
 
-		public int moveSide(List<List<Cell>> grid, char direction) {
+		bool checkSideMove(int moveDir, List<List<Cell>> grid) { 
+
+			foreach(Cell cell in cells) {
+				
+				//check Walls
+				if (cell.X + moveDir < 0 || cell.X + moveDir > grid[0].Count - 1) {
+					return false;
+				}
+				//check other stationary rocks
+				if (grid[cell.Y][cell.X + moveDir].Solid) {
+					return false;
+				}
+			}
+
+
+
+			return true;
+		}
+
+		bool checkDownMove(List<List<Cell>> grid) {
+
+            foreach (Cell cell in cells) {
+
+                //check Floor
+                if (cell.Y -1 < 0) {
+                    return false;
+                }
+                //check other stationary rocks
+                if (cell.Y == 0 || grid[cell.Y - 1][cell.X].Solid) {
+                    return false;
+                }
+            }
+
+
+
+            return true;
+        }
+
+        public int moveSide(List<List<Cell>> grid, char direction) {
 
 			int dirValue;
 			if (direction == '<') {
@@ -76,75 +115,54 @@ namespace _17th_Day {
 			List<Cell> newCells = new List<Cell>();
 
 
-			if (!stationary)
-			{
-				foreach (Cell selectedCell in cells)
-				{
+			if (!stationary && checkSideMove(dirValue, grid)){
 
-					
+				foreach (Cell selectedCell in cells){
+
+                    selectedCell.Occupied = false;
+                    Cell newCell = grid[selectedCell.Y][selectedCell.X + dirValue];
 
 
-					//is not at side and the looked at cell is not already occupied 
-					if (selectedCell.X + dirValue < 0 || selectedCell.X + dirValue > grid[0].Count - 1 || grid[selectedCell.Y][selectedCell.X + dirValue].Occupied)
-					{
-						newCells.Add(selectedCell);
-						continue;
+                    newCell.Occupied = true;
+                    newCells.Add(newCell);
 
-					}
-					else
-					{
-						
-
-						Cell newCell = grid[selectedCell.Y][selectedCell.X + dirValue];
-
-						
-
-						newCells.Add(newCell);
-
-					}
 				}
+			} else{
+				newCells = cells;
 			}
 
-			foreach(Cell cell in cells) {
-				cell.Occupied = false;
-			}
-			foreach(Cell cell in newCells) {
-				cell.Occupied = true;
-			}
 			cells = newCells;
 
 			return 0;
 		}
 
 		public int moveDown(List<List<Cell>> grid) {
+			
+	
 			List <Cell> newCells = new List <Cell> ();
 
 			
-			while (cells.Count > 0 && !stationary) {
-				Cell selectedCell = cells[0];
-				cells.RemoveAt(0);
+			if (!stationary && checkDownMove(grid)) {
+                foreach (Cell selectedCell in cells) {
 
-				if (selectedCell.Y == 0 || grid[selectedCell.Y - 1][selectedCell.X].Solid || grid[selectedCell.Y-1][selectedCell.X].Occupied)
-				{
-					selectedCell.Solid = true;
-					makeSolid();
-					newCells.Add(selectedCell);
-					stationary = true;
+                    selectedCell.Occupied = false;
+                    Cell newCell = grid[selectedCell.Y - 1][selectedCell.X];
 
-					return 1;
 
-				} else {
-					selectedCell.Occupied = false;
+                    newCell.Occupied = true;
+                    newCells.Add(newCell);
 
-					Cell newCell = grid[selectedCell.Y - 1][selectedCell.X];
+                }
 
-					newCell.Occupied = true;
+			} else {
 
-					newCells.Add(newCell);
+                makeSolid();
+                stationary = true;
 
-				}
+                return 1;
+            }
 
-			}
+
 
 			cells = newCells;
 			return 0;

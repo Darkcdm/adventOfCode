@@ -22,7 +22,7 @@ namespace _17th_Day {
 
         public Cave () {
             this.width = 7;
-            this.height = 5;
+            this.height = 6;
 
             grid = new List<List<Cell>>();
 
@@ -72,7 +72,7 @@ namespace _17th_Day {
 
 
             Rocks rocks = new Rocks();
-            Rock rock = rocks.getRock(grid, getHighestPoint()); //TESTING
+            Rock rock = rocks.getRock(grid, getHighestPoint());
             rockCount++;
 
             Input input = new Input();
@@ -87,10 +87,10 @@ namespace _17th_Day {
 
                     if (maxY + 4 >= height)
                     {
-                        addHeight(5);
+                        addHeight(7);
                     }
 
-                    rock = rocks.getGrain(grid, maxY);
+                    rock = rocks.getRock(grid, maxY);
                     rockCount++;
                 } else {
                     char dirChar = input.TestTextChar; //TESTING
@@ -101,8 +101,10 @@ namespace _17th_Day {
 
                     }
 
-                    solidRockCount += rock.moveSide(grid, dirChar);
+
                     solidRockCount += rock.moveDown(grid);
+                    solidRockCount += rock.moveSide(grid, dirChar);
+                    
 
 
                 }
