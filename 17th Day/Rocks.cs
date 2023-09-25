@@ -123,9 +123,13 @@ namespace _17th_Day {
                     Cell newCell = grid[selectedCell.Y][selectedCell.X + dirValue];
 
 
-                    newCell.Occupied = true;
+                    
                     newCells.Add(newCell);
 
+				}
+
+				foreach (Cell selectedCell in newCells) {
+					selectedCell.Occupied = true;
 				}
 			} else{
 				newCells = cells;
@@ -149,12 +153,14 @@ namespace _17th_Day {
                     Cell newCell = grid[selectedCell.Y - 1][selectedCell.X];
 
 
-                    newCell.Occupied = true;
                     newCells.Add(newCell);
 
                 }
+                foreach (Cell selectedCell in newCells) {
+                    selectedCell.Occupied = true;
+                }
 
-			} else {
+            } else {
 
                 makeSolid();
                 stationary = true;
@@ -221,23 +227,23 @@ namespace _17th_Day {
 
 			Cell cell;
 
-			cell = grid[y + 4][2];
+			cell = grid[y + 5][2];
 			cell.Occupied = true;
 			cells.Add(cell);
             
-			cell = grid[y + 4][3];
+			cell = grid[y + 5][3];
             cell.Occupied = true;
             cells.Add(cell);
 
-			cell = grid[y + 4][4];
+			cell = grid[y + 5][4];
 			cell.Occupied = true;
             cells.Add(cell);
 
-            cell = grid[y + 3][3];
+            cell = grid[y + 4][3];
 			cell.Occupied = true;
             cells.Add(cell);
 
-            cell = grid[y + 5][3];
+            cell = grid[y + 6][3];
             cell.Occupied = true;
             cells.Add(cell);
 

@@ -53,7 +53,15 @@ namespace _17th_Day {
 
         }
         
-        public void printCave (){
+        public void printCave (char dir = '0'){
+
+            if (dir == '0') {
+                Console.WriteLine("Falling");
+            } else {
+                Console.WriteLine(dir);
+            }
+
+
             for (int y = this.height-1; y >= 0; y--) {
                 Console.Write('|');
                 for (int x = 0; x < width; x++) {
@@ -77,46 +85,48 @@ namespace _17th_Day {
 
             Input input = new Input();
 
+
             while (solidRockCount < rockMax) {
 
 
 
-                if (rock.Stationary) {
+                 
+                    char dirChar = input.TrueTextChar; //TESTING
 
-                    int maxY = getHighestPoint();
-
-                    if (maxY + 4 >= height)
-                    {
-                        addHeight(7);
-                    }
-
-                    rock = rocks.getRock(grid, maxY);
-                    rockCount++;
-                } else {
-                    char dirChar = input.TestTextChar; //TESTING
-
-                    if (printout)
-                    {
-                        Console.WriteLine(dirChar);
-
-                    }
 
 
                     solidRockCount += rock.moveDown(grid);
-                    solidRockCount += rock.moveSide(grid, dirChar);
+
+                    if (printout) {
+                        printCave();
+                    }
+
+                    if (rock.Stationary) {
+
+                        int maxY = getHighestPoint();
+
+                        if (maxY + 7 >= height) {
+                            addHeight(7);
+                        }
+
+                        rock = rocks.getRock(grid, maxY);
+                        rockCount++;
+                    }
+
+
+
+                    
+                        solidRockCount += rock.moveSide(grid, dirChar);
+
+                        if (printout) {
+                            printCave(dirChar);
+                        }
+
                     
 
 
-                }
 
-                if (printout)
-                {
-                    //Console.Clear();
-
-                    printCave();
-
-                    //System.Threading.Thread.Sleep(100);
-                }
+                
 
             }
 
