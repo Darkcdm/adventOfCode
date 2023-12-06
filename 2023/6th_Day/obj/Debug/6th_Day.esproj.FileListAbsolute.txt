@@ -1,0 +1,2 @@
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\2023\6th_Day\obj\Debug\6th_Day.esproj.SuggestedBindingRedirects.cache
+C:\Users\darks\Desktop\GitHub Repos\adventOfCode\2023\6th_Day\obj\Debug\6th_Day.esproj.CoreCompileInputs.cache
