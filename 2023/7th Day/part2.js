@@ -42,7 +42,7 @@ class Hand {
         for (var i = 0; i < cardsCount.size; i++) {
             if ([...cardsCount.entries()][i][1] + jockeys == 3) {
                 for (var j = 0; j < cardsCount.size; j++) {
-                    if ([...cardsCount.entries()][j][1] == 2) {
+                    if ([...cardsCount.entries()][j][1] == 2 && j != i) {
                         return 100;
                     }
                 }
@@ -51,7 +51,7 @@ class Hand {
         for (var i = 0; i < cardsCount.size; i++) {
             if ([...cardsCount.entries()][i][1] == 3) {
                 for (var j = 0; j < cardsCount.size; j++) {
-                    if ([...cardsCount.entries()][j][1] + jockeys == 2) {
+                    if ([...cardsCount.entries()][j][1] + jockeys == 2 && j != i) {
                         return 100;
                     }
                 }
@@ -68,7 +68,7 @@ class Hand {
         for (var i = 0; i < cardsCount.size; i++) {
             if ([...cardsCount.entries()][i][1] + jockeys == 2) {
                 for (var j = 0; j < cardsCount.size; j++) {
-                    if (j != i && [...cardsCount.entries()][j][1] == 2) {
+                    if (j != i && [...cardsCount.entries()][j][1] == 2 && j != i) {
                         return 60;
                     }
                 }
@@ -78,7 +78,7 @@ class Hand {
         for (var i = 0; i < cardsCount.size; i++) {
             if ([...cardsCount.entries()][i][1] == 2) {
                 for (var j = 0; j < cardsCount.size; j++) {
-                    if (j != i && [...cardsCount.entries()][j][1] + jockeys == 2) {
+                    if (j != i && [...cardsCount.entries()][j][1] + jockeys == 2 && j != i) {
                         return 60;
                     }
                 }
@@ -92,11 +92,9 @@ class Hand {
         }
         //High card, where all cards' labels are distinct: 23456 #20
 
-        if (jockeys == 5) {
+
+        if (jockeys >= 4) {
             return 140;
-        }
-        if (jockeys == 4) {
-            return 120;
         }
         if (jockeys == 3) {
             return 80;
@@ -140,7 +138,7 @@ class Card {
             'A': 13,
             'K': 12,
             'Q': 11,
-            'J': 10,
+            'J': 0,
             'T': 9,
             '9': 8,
             '8': 7,
@@ -163,13 +161,14 @@ function showDown(fighterHand, opponentHand) {
             continue;
         }
 
+        /*
         if (fighterHand.cards[i].value == 10 || fighterHand.cards[i].char == 'J') {
             return -1;
         }
         if (opponentHand.cards[i].value == 10 || opponentHand.cards[i].char == 'J') {
             return 1;
         }
-
+        */
 
         if (fighterHand.cards[i].value > opponentHand.cards[i].value) {
             return 1;
@@ -190,7 +189,7 @@ for (let i = 0; i < input.length; i++) {
 }
 
 
-
+/*
 //fighting it out
 for (let fighterIndex = 0; fighterIndex < hands.length; fighterIndex++) {
     for (let opponentIndex = 0; opponentIndex < hands.length; opponentIndex++) {
@@ -208,7 +207,7 @@ for (let fighterIndex = 0; fighterIndex < hands.length; fighterIndex++) {
         }
 
         if (fighterHand.strength == opponentHand.strength) {
-            fighterHand.strength = fighterHand.strength + showDown(fighterHand, opponentHand);
+            fighterHand.strength = fighterHand.strength + 
         }
 
 
@@ -221,9 +220,15 @@ for (let fighterIndex = 0; fighterIndex < hands.length; fighterIndex++) {
         fighterHand.strength = holding;
     }
 }
+*/
 
-
-hands.sort((a, b) => a.wins - b.wins);
+hands.sort(function (a, b) {
+    let result = a.strength - b.strength;
+    if (result == 0) {
+        result = showDown(a, b);
+    }
+    return result;
+});
 
 
 
