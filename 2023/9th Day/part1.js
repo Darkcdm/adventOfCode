@@ -8,11 +8,13 @@ input = input.split('\n');
 
 let resultSum = 0;
 
+//for each input line
 for (let lineIndex = 0; lineIndex < input.length; lineIndex++) {
 
+    //Load
     let sets = [];
     sets.push(parseInput(input[lineIndex]));
-
+    //calculate till you get zeros
     while (!checkZeroSet(sets[sets.length - 1])) {
         sets.push(getDifSet(sets[sets.length - 1]));
     }
@@ -26,14 +28,16 @@ for (let lineIndex = 0; lineIndex < input.length; lineIndex++) {
     }
 
     resultSum += sets[0][sets[0].length - 1];
+    console.log(sets);
 }
+
 
 console.log(resultSum);
 
 function getDifSet(set) {
     let difSet = [];
     for (let i = 0; i < set.length - 1; i++) {
-        let dif = Math.abs(Math.abs(set[i]) - Math.abs(set[i + 1]));
+        let dif = (set[i] - set[i + 1]) * -1;
         difSet.push(dif);
     }
     return difSet;
