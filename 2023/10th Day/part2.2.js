@@ -12,6 +12,7 @@ class Pipe {
         this.piping = false;
         this.leftOfPipe = false;
         this.rightOfPipe = false;
+        this.isInside = false;
 
         if (char == '.') {
             this.type = "ground";
@@ -202,7 +203,7 @@ function printMap(map) {
 //set ALL
 let map = new Array();
 
-let input = fs.readFileSync("true", 'utf-8');
+let input = fs.readFileSync("test", 'utf-8');
 input = input.split('\n');
 let startPipe;
 
@@ -341,20 +342,12 @@ for (let pathIndex = 0; pathIndex < path.length - 1; pathIndex++) {
             map[rightPipeY][rightPipeX].rightOfPipe = true;
         }
 
-        if (backPipeX >= 0 && backPipeX < map[0].length && backPipeY >= 0 && backPipeY < map.length) {
-            map[backPipeY][backPipeX].rightOfPipe = true;
-        }
-
     } else {
         //coming from RIGHT
         let diagonalPipeX = vectorLeft[0] + backPipeX;
         let diagonalPipeY = vectorLeft[1] + backPipeY;
         if (diagonalPipeX >= 0 && diagonalPipeX < map[0].length && diagonalPipeY >= 0 && diagonalPipeY < map.length) {
             map[leftPipeY][leftPipeX].leftOfPipe = true;
-        }
-
-        if (backPipeX >= 0 && backPipeX < map[0].length && backPipeY >= 0 && backPipeY < map.length) {
-            map[backPipeY][backPipeX].leftOfPipe = true;
         }
     }
 }
@@ -384,27 +377,7 @@ let memory = 0;
 while (unmarkedPipes.length > 0) {
     console.log(unmarkedPipes.length);
     if (unmarkedPipes.length == memory) {
-        printMap(map);
-
-        let rightCount = 0;
-        for (let y = 0; y < map.length; y++) {
-            for (let x = 0; x < map[y].length; x++) {
-                if (map[y][x].rightOfPipe && !map[y][x].piping) {
-                    rightCount++;
-                }
-            }
-        }
-
-        let leftCount = 0;
-        for (let y = 0; y < map.length; y++) {
-            for (let x = 0; x < map[y].length; x++) {
-                if (map[y][x].leftOfPipe && !map[y][x].piping) {
-                    leftCount++;
-                }
-            }
-        }
-        console.log(leftCount, rightCount);
-        process.exit();
+        break;
     } else {
         memory = unmarkedPipes.length;
     }
@@ -469,6 +442,54 @@ while (unmarkedPipes.length > 0) {
     unmarkedPipes = newUnmarkedPipes;
 }
 printMap(map);
+
+
+
+
+
+//SCANN
+let insideCounter = 0;
+
+for (let y = 0; y < map.length; y++) {
+    let inPipeState = false;
+    for (let x = 0; x < map[0].length; x++) {
+        let selectedPipe = map[y][x];
+
+        if (selectedPipe.piping && selectedPipe.char != '-') {
+            if (inPipeState) {
+                inPipeState = false;
+            } else {
+                inPipeState = true;
+            }
+            continue;
+        }
+
+        if (inPipeState) {
+            selectedPipe.isInside = true;
+            insideCounter++;
+        }
+
+    }
+}
+console.log(insideCounter);
+//SCANN
+
+
+for (let y = 0; y < map.length; y++) {
+    let line = "";
+    for (let x = 0; x < map[0].length; x++) {
+        if (map[y][x].piping) {
+            line = line + "*";
+        } else if (map[y][x].isInside) {
+            line = line + "I";
+        } else {
+            line = line + "O";
+        }
+
+    }
+    console.log(line);
+}
+
 
 let rightCount = 0;
 for (let y = 0; y < map.length; y++) {
